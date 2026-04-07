@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Progreso del mes</title>
+  <style>
+    :root {
+      --text: #000;
+      --track: #ecebe8;
+      --fill: #68b984;
+      --marker: rgba(0, 0, 0, 0.10);
+    }
+    body {
+      margin: 0;
+      padding: 10px 12px;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--text);
+      background: transparent;
+    }
+    .title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .bar {
+      position: relative;
+      width: 100%;
+      height: 12px;
+      background: var(--track);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .fill {
+      height: 100%;
+      width: 0%;
+      background: var(--fill);
+      border-radius: 999px;
+    }
+    .marker {
+      position: absolute;
+      top: 0;
+      width: 1px;
+      height: 12px;
+      background: var(--marker);
+    }
+    .meta {
+      margin-top: 8px;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
+<body>
+  <div class="title">Progreso del mes</div>
+  <div class="bar" id="bar">
+    <div class="fill" id="fill"></div>
+  </div>
+  <div class="meta" id="meta"></div>
+
+  <script>
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+
+    const start = new Date(year, month, 1);
+    const end = new Date(year, month + 1, 1);
+    const msPerDay = 1000 * 60 * 60 * 24;
+
+    const totalDays = Math.round((end - start) / msPerDay);
+    const dayOfMonth = now.getDate();
+    const daysLeft = totalDays - dayOfMonth;
+    const percent = (dayOfMonth / totalDays) * 100;
+
+    document.getElementById("fill").style.width = percent.toFixed(2) + "%";
+    document.getElementById("meta").textContent =
+      `${percent.toFixed(1)}% completado · Día ${dayOfMonth}/${totalDays} · Quedan ${daysLeft} días`;
+
+    const bar = document.getElementById("bar");
+    for (let i = 1; i < totalDays; i++) {
+      const marker = document.createElement("div");
+      marker.className = "marker";
+      marker.style.left = `${(i / totalDays) * 100}%`;
+      bar.appendChild(marker);
+    }
+  </script>
+</body>
+</html>
