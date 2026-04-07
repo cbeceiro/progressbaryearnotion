@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Progreso del día</title>
+  <title>Día en horas</title>
   <link rel="stylesheet" href="../shared/widget.css" />
 </head>
 <body>
@@ -16,30 +16,20 @@
   </div>
 
   <script>
-    const title = "Progreso del día";
     const now = new Date();
-
     const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
     const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
 
-    const msPerMinute = 60 * 1000;
-    const elapsed = now - start;
-    const total = end - start;
-    const percent = (elapsed / total) * 100;
+    const elapsedHours = (now - start) / (60 * 60 * 1000);
+    const totalHours = 24;
+    const hoursLeft = Math.max(0, totalHours - elapsedHours);
+    const percent = (elapsedHours / totalHours) * 100;
 
-    const minutesLeft = Math.ceil((end - now) / msPerMinute);
-    const hoursLeft = Math.floor(minutesLeft / 60);
-    const remMinutes = Math.max(0, minutesLeft % 60);
+    document.getElementById("title").textContent = "Día en horas";
+    document.getElementById("fill").style.width = `${Math.max(0, Math.min(100, percent)).toFixed(2)}%`;
+    document.getElementById("meta").textContent = `${Math.floor(elapsedHours)}/${totalHours} horas · Quedan ${Math.ceil(hoursLeft)}`;
 
-    const titleEl = document.getElementById("title");
     const barEl = document.getElementById("bar");
-    const fillEl = document.getElementById("fill");
-    const metaEl = document.getElementById("meta");
-
-    titleEl.textContent = title;
-    fillEl.style.width = `${Math.max(0, Math.min(100, percent)).toFixed(2)}%`;
-    metaEl.textContent = `${percent.toFixed(1)}% completado · Quedan ${hoursLeft}h ${remMinutes}m`;
-
     for (let i = 1; i < 24; i++) {
       const marker = document.createElement("div");
       marker.className = "marker";

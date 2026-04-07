@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Progreso de la semana</title>
+  <title>Semana en horas</title>
   <link rel="stylesheet" href="../shared/widget.css" />
 </head>
 <body>
@@ -16,11 +16,9 @@
   </div>
 
   <script>
-    const title = "Progreso de la semana";
     const now = new Date();
-
     const jsDay = now.getDay();
-    const dayOffset = (jsDay + 6) % 7; // lunes=0
+    const dayOffset = (jsDay + 6) % 7;
 
     const start = new Date(now);
     start.setHours(0, 0, 0, 0);
@@ -29,23 +27,16 @@
     const end = new Date(start);
     end.setDate(end.getDate() + 7);
 
-    const msPerDay = 24 * 60 * 60 * 1000;
-    const elapsed = now - start;
-    const total = end - start;
-    const percent = (elapsed / total) * 100;
+    const elapsedHours = (now - start) / (60 * 60 * 1000);
+    const totalHours = 7 * 24;
+    const hoursLeft = Math.max(0, totalHours - elapsedHours);
+    const percent = (elapsedHours / totalHours) * 100;
 
-    const dayOfWeek = dayOffset + 1;
-    const daysLeft = Math.max(0, Math.ceil((end - now) / msPerDay));
+    document.getElementById("title").textContent = "Semana en horas";
+    document.getElementById("fill").style.width = `${Math.max(0, Math.min(100, percent)).toFixed(2)}%`;
+    document.getElementById("meta").textContent = `${Math.floor(elapsedHours)}/${totalHours} horas · Quedan ${Math.ceil(hoursLeft)}`;
 
-    const titleEl = document.getElementById("title");
     const barEl = document.getElementById("bar");
-    const fillEl = document.getElementById("fill");
-    const metaEl = document.getElementById("meta");
-
-    titleEl.textContent = title;
-    fillEl.style.width = `${Math.max(0, Math.min(100, percent)).toFixed(2)}%`;
-    metaEl.textContent = `${percent.toFixed(1)}% completado · Día ${dayOfWeek}/7 · Quedan ${daysLeft} días`;
-
     for (let i = 1; i < 7; i++) {
       const marker = document.createElement("div");
       marker.className = "marker";

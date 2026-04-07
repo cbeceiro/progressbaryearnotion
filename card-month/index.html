@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tarjeta mes</title>
+  <link rel="stylesheet" href="../shared/card.css" />
+</head>
+<body>
+  <div class="title">Este mes</div>
+  <div class="percent" id="percent"></div>
+  <div class="bar"><div class="fill" id="fill"></div></div>
+  <div class="meta" id="meta"></div>
+
+  <script>
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const start = new Date(year, month, 1, 0, 0, 0, 0);
+    const end = new Date(year, month + 1, 1, 0, 0, 0, 0);
+
+    const percent = ((now - start) / (end - start)) * 100;
+    const totalDays = Math.round((end - start) / (24 * 60 * 60 * 1000));
+    const dayOfMonth = now.getDate();
+    const daysLeft = Math.max(0, Math.ceil((end - now) / (24 * 60 * 60 * 1000)));
+
+    document.getElementById("percent").textContent = `${percent.toFixed(1)}%`;
+    document.getElementById("fill").style.width = `${Math.max(0, Math.min(100, percent)).toFixed(2)}%`;
+    document.getElementById("meta").textContent = `Día ${dayOfMonth}/${totalDays} · Quedan ${daysLeft} días`;
+  </script>
+  <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript>
+    <img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" />
+  </noscript>
+</body>
+</html>

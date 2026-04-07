@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Progreso del mes</title>
+  <title>Mes en horas</title>
   <link rel="stylesheet" href="../shared/widget.css" />
 </head>
 <body>
@@ -16,32 +16,23 @@
   </div>
 
   <script>
-    const title = "Progreso del mes";
     const now = new Date();
-
     const year = now.getFullYear();
     const month = now.getMonth();
     const start = new Date(year, month, 1, 0, 0, 0, 0);
     const end = new Date(year, month + 1, 1, 0, 0, 0, 0);
 
-    const msPerDay = 24 * 60 * 60 * 1000;
-    const elapsed = now - start;
-    const total = end - start;
-    const percent = (elapsed / total) * 100;
+    const elapsedHours = (now - start) / (60 * 60 * 1000);
+    const totalHours = Math.round((end - start) / (60 * 60 * 1000));
+    const hoursLeft = Math.max(0, totalHours - elapsedHours);
+    const percent = (elapsedHours / totalHours) * 100;
 
-    const totalDays = Math.round((end - start) / msPerDay);
-    const dayOfMonth = now.getDate();
-    const daysLeft = Math.max(0, Math.ceil((end - now) / msPerDay));
+    document.getElementById("title").textContent = "Mes en horas";
+    document.getElementById("fill").style.width = `${Math.max(0, Math.min(100, percent)).toFixed(2)}%`;
+    document.getElementById("meta").textContent = `${Math.floor(elapsedHours)}/${totalHours} horas · Quedan ${Math.ceil(hoursLeft)}`;
 
-    const titleEl = document.getElementById("title");
     const barEl = document.getElementById("bar");
-    const fillEl = document.getElementById("fill");
-    const metaEl = document.getElementById("meta");
-
-    titleEl.textContent = title;
-    fillEl.style.width = `${Math.max(0, Math.min(100, percent)).toFixed(2)}%`;
-    metaEl.textContent = `${percent.toFixed(1)}% completado · Día ${dayOfMonth}/${totalDays} · Quedan ${daysLeft} días`;
-
+    const totalDays = Math.round((end - start) / (24 * 60 * 60 * 1000));
     for (let i = 1; i < totalDays; i++) {
       const marker = document.createElement("div");
       marker.className = "marker";

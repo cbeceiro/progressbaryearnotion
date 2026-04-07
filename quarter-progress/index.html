@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Progreso del mes</title>
+  <title>Progreso del trimestre</title>
   <link rel="stylesheet" href="../shared/widget.css" />
 </head>
 <body>
@@ -16,21 +16,21 @@
   </div>
 
   <script>
-    const title = "Progreso del mes";
     const now = new Date();
-
     const year = now.getFullYear();
-    const month = now.getMonth();
-    const start = new Date(year, month, 1, 0, 0, 0, 0);
-    const end = new Date(year, month + 1, 1, 0, 0, 0, 0);
+    const quarter = Math.floor(now.getMonth() / 3) + 1;
+    const startMonth = (quarter - 1) * 3;
 
+    const start = new Date(year, startMonth, 1, 0, 0, 0, 0);
+    const end = new Date(year, startMonth + 3, 1, 0, 0, 0, 0);
     const msPerDay = 24 * 60 * 60 * 1000;
+
     const elapsed = now - start;
     const total = end - start;
     const percent = (elapsed / total) * 100;
 
     const totalDays = Math.round((end - start) / msPerDay);
-    const dayOfMonth = now.getDate();
+    const dayOfQuarter = Math.floor((now - start) / msPerDay) + 1;
     const daysLeft = Math.max(0, Math.ceil((end - now) / msPerDay));
 
     const titleEl = document.getElementById("title");
@@ -38,15 +38,21 @@
     const fillEl = document.getElementById("fill");
     const metaEl = document.getElementById("meta");
 
-    titleEl.textContent = title;
+    titleEl.textContent = `Progreso del trimestre (Q${quarter})`;
     fillEl.style.width = `${Math.max(0, Math.min(100, percent)).toFixed(2)}%`;
-    metaEl.textContent = `${percent.toFixed(1)}% completado · Día ${dayOfMonth}/${totalDays} · Quedan ${daysLeft} días`;
+    metaEl.textContent = `${percent.toFixed(1)}% completado · Día ${dayOfQuarter}/${totalDays} · Quedan ${daysLeft} días`;
 
-    for (let i = 1; i < totalDays; i++) {
-      const marker = document.createElement("div");
-      marker.className = "marker";
-      marker.style.left = `${(i / totalDays) * 100}%`;
-      barEl.appendChild(marker);
+    let accumulatedDays = 0;
+    for (let i = 0; i < 3; i++) {
+      if (i > 0) {
+        const marker = document.createElement("div");
+        marker.className = "marker strong";
+        marker.style.left = `${(accumulatedDays / totalDays) * 100}%`;
+        barEl.appendChild(marker);
+      }
+      const mStart = new Date(year, startMonth + i, 1);
+      const mEnd = new Date(year, startMonth + i + 1, 1);
+      accumulatedDays += Math.round((mEnd - mStart) / msPerDay);
     }
   </script>
   <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
