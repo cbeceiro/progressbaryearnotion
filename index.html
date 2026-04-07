@@ -7,11 +7,12 @@
   <style>
     :root {
       --bg: transparent;
-      --text: #37352f;
-      --muted: #787774;
+      --text: #000000;
       --track: #ecebe8;
       --fill-1: #b7d4c0;
       --fill-2: #9fc5ac;
+      --marker: rgba(0, 0, 0, 0.14);
+      --marker-strong: rgba(0, 0, 0, 0.24);
     }
 
     * {
@@ -35,7 +36,6 @@
 
     .wrap {
       width: 100%;
-      max-width: none;
     }
 
     .title {
@@ -43,30 +43,49 @@
       font-weight: 600;
       line-height: 1.4;
       margin-bottom: 8px;
-      color: var(--muted);
+      color: var(--text);
     }
 
     .bar {
+      position: relative;
       width: 100%;
-      height: 12px;
+      height: 14px;
       background: var(--track);
       border-radius: 999px;
       overflow: hidden;
     }
 
     .fill {
-      height: 100%;
+      position: absolute;
+      inset: 0 auto 0 0;
       width: 0%;
+      height: 100%;
       border-radius: 999px;
       background: linear-gradient(90deg, var(--fill-1), var(--fill-2));
       transition: width 0.8s ease;
+      z-index: 1;
+    }
+
+    .marker {
+      position: absolute;
+      top: 0;
+      width: 1px;
+      height: 14px;
+      background: var(--marker);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .marker.quarter {
+      width: 2px;
+      background: var(--marker-strong);
     }
 
     .meta {
       margin-top: 8px;
       font-size: 12px;
       line-height: 1.4;
-      color: var(--muted);
+      color: var(--text);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -77,7 +96,7 @@
   <div class="wrap">
     <div class="title">Progreso del año</div>
 
-    <div class="bar">
+    <div class="bar" id="bar">
       <div class="fill" id="fill"></div>
     </div>
 
@@ -86,21 +105,44 @@
 
   <script>
     const now = new Date();
-    const start = new Date(now.getFullYear(), 0, 1);
-    const end = new Date(now.getFullYear() + 1, 0, 1);
-
-    const elapsed = now - start;
-    const total = end - start;
-    const percent = (elapsed / total) * 100;
+    const year = now.getFullYear();
+    const start = new Date(year, 0, 1);
+    const end = new Date(year + 1, 0, 1);
 
     const msPerDay = 1000 * 60 * 60 * 24;
+    const totalDays = Math.round((end - start) / msPerDay);
     const dayOfYear = Math.floor((now - start) / msPerDay) + 1;
-    const totalDays = Math.floor((end - start) / msPerDay);
     const daysLeft = totalDays - dayOfYear;
+    const percent = (dayOfYear / totalDays) * 100;
 
     document.getElementById("fill").style.width = percent.toFixed(2) + "%";
     document.getElementById("meta").textContent =
-      `${percent.toFixed(1)}% completado · ${dayOfYear}/${totalDays} días · Quedan ${daysLeft} días`;
+      `${percent.toFixed(1)}% completado · Día ${dayOfYear}/${totalDays} · Quedan ${daysLeft} días`;
+
+    const bar = document.getElementById("bar");
+    let accumulatedDays = 0;
+
+    for (let month = 0; month < 12; month++) {
+      const monthStart = new Date(year, month, 1);
+      const nextMonthStart = new Date(year, month + 1, 1);
+      const monthDays = Math.round((nextMonthStart - monthStart) / msPerDay);
+
+      const startPercent = (accumulatedDays / totalDays) * 100;
+
+      if (month > 0) {
+        const marker = document.createElement("div");
+        marker.className = "marker";
+
+        if (month === 3 || month === 6 || month === 9) {
+          marker.classList.add("quarter");
+        }
+
+        marker.style.left = `${startPercent}%`;
+        bar.appendChild(marker);
+      }
+
+      accumulatedDays += monthDays;
+    }
   </script>
 </body>
 </html>
