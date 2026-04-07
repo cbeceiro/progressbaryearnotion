@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Progreso del año</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: transparent;
+    }
+    .wrap {
+      width: 100%;
+      max-width: 420px;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    .title {
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #444;
+    }
+    .bar {
+      width: 100%;
+      height: 18px;
+      background: #e9e9e9;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #4f46e5, #06b6d4);
+    }
+    .meta {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="title">Progreso del año</div>
+    <div class="bar">
+      <div class="fill" id="fill"></div>
+    </div>
+    <div class="meta" id="meta"></div>
+  </div>
+
+  <script>
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 1);
+    const end = new Date(now.getFullYear() + 1, 0, 1);
+
+    const elapsed = now - start;
+    const total = end - start;
+    const percent = (elapsed / total) * 100;
+
+    document.getElementById("fill").style.width = percent.toFixed(2) + "%";
+    document.getElementById("meta").textContent =
+      `${percent.toFixed(1)}% completado · ${Math.ceil((end - now) / (1000 * 60 * 60 * 24))} días restantes`;
+  </script>
+</body>
+</html>
