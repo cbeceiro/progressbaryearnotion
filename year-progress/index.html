@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Progreso del año</title>
+  <style>
+    :root {
+      --bg: transparent;
+      --text: #000000;
+      --track: #ecebe8;
+      --fill: #68b984;
+      --marker: rgba(0, 0, 0, 0.10);
+      --marker-strong: rgba(0, 0, 0, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Helvetica, Arial, sans-serif;
+      color: var(--text);
+    }
+
+    body {
+      padding: 10px 12px;
+    }
+
+    .wrap {
+      width: 100%;
+    }
+
+    .title {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .bar {
+      position: relative;
+      width: 100%;
+      height: 12px;
+      background: var(--track);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0%;
+      height: 100%;
+      border-radius: 999px;
+      background: var(--fill);
+      transition: width 0.8s ease;
+      z-index: 1;
+    }
+
+    .marker {
+      position: absolute;
+      top: 0;
+      width: 1px;
+      height: 12px;
+      background: var(--marker);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .marker.quarter {
+      background: var(--marker-strong);
+    }
+
+    .meta {
+      margin-top: 8px;
+      font-size: 12px;
+      line-height: 1.4;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="title">Progreso del año</div>
+
+    <div class="bar" id="bar">
+      <div class="fill" id="fill"></div>
+    </div>
+
+    <div class="meta" id="meta"></div>
+  </div>
+
+  <script>
+    const now = new Date();
+    const year = now.getFullYear();
+    const start = new Date(year, 0, 1);
+    const end = new Date(year + 1, 0, 1);
+
+    const msPerDay = 1000 * 60 * 60 * 24;
+    const totalDays = Math.round((end - start) / msPerDay);
+    const dayOfYear = Math.floor((now - start) / msPerDay) + 1;
+    const daysLeft = totalDays - dayOfYear;
+    const percent = (dayOfYear / totalDays) * 100;
+
+    document.getElementById("fill").style.width = percent.toFixed(2) + "%";
+    document.getElementById("meta").textContent =
+      `${percent.toFixed(1)}% completado · Día ${dayOfYear}/${totalDays} · Quedan ${daysLeft} días`;
+
+    const bar = document.getElementById("bar");
+    let accumulatedDays = 0;
+
+    for (let month = 0; month < 12; month++) {
+      const monthStart = new Date(year, month, 1);
+      const nextMonthStart = new Date(year, month + 1, 1);
+      const monthDays = Math.round((nextMonthStart - monthStart) / msPerDay);
+
+      const startPercent = (accumulatedDays / totalDays) * 100;
+
+      if (month > 0) {
+        const marker = document.createElement("div");
+        marker.className = "marker";
+
+        if (month === 3 || month === 6 || month === 9) {
+          marker.classList.add("quarter");
+        }
+
+        marker.style.left = `${startPercent}%`;
+        bar.appendChild(marker);
+      }
+
+      accumulatedDays += monthDays;
+    }
+  </script>
+</body>
+</html>
