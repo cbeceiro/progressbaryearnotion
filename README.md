@@ -1,6 +1,6 @@
-# Widget de progreso del año para Notion
+# Widgets de progreso para Notion
 
-Este widget sirve para mostrar en Notion una **barra de progreso del año** de forma visual y automática.
+Este proyecto sirve para mostrar en Notion widgets de progreso de forma visual y automática.
 
 Muestra:
 - porcentaje del año transcurrido
@@ -12,7 +12,7 @@ Muestra:
 
 El widget ya está publicado y se puede usar directamente aquí:
 
-`https://cbeceiro.github.io/progressbaryearnotion/`
+`https://cbeceiro.github.io/progressbarnotion/`
 
 Para usarlo en Notion:
 1. Escribe `/embed`
@@ -24,6 +24,10 @@ Para usarlo en Notion:
 El widget funciona con un único archivo:
 
 - `index.html`
+
+## Aviso de visitas
+
+Al usar los widgets mediante embed en Notion, se registra únicamente el número de visitas de cada página.
 
 ## Personalización
 
