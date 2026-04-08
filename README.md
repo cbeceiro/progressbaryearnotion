@@ -27,7 +27,6 @@ Los widgets están organizados por secciones:
 - `hours/day`, `hours/week`, `hours/month`, `hours/year`
 - `one-percent/compound`, `one-percent/compound-quarter`, `one-percent/compound-milestones`, `one-percent/compound-milestones-dates`
 - `energy/curve-day`
-- `counters/weekends-left`, `counters/mondays-left`
 - Estilos compartidos en `shared/`
 
 ## Personalización
