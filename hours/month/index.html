@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Año en horas</title>
-  <link rel="stylesheet" href="../shared/widget.css" />
+  <title>Mes en horas</title>
+  <link rel="stylesheet" href="../../shared/widget.css" />
 </head>
 <body>
   <div class="wrap">
@@ -18,25 +18,25 @@
   <script>
     const now = new Date();
     const year = now.getFullYear();
-    const start = new Date(year, 0, 1, 0, 0, 0, 0);
-    const end = new Date(year + 1, 0, 1, 0, 0, 0, 0);
+    const month = now.getMonth();
+    const start = new Date(year, month, 1, 0, 0, 0, 0);
+    const end = new Date(year, month + 1, 1, 0, 0, 0, 0);
 
     const elapsedHours = (now - start) / (60 * 60 * 1000);
     const totalHours = Math.round((end - start) / (60 * 60 * 1000));
     const hoursLeft = Math.max(0, totalHours - elapsedHours);
     const percent = (elapsedHours / totalHours) * 100;
 
-    document.getElementById("title").textContent = "Año en horas";
+    document.getElementById("title").textContent = "Mes en horas";
     document.getElementById("fill").style.width = `${Math.max(0, Math.min(100, percent)).toFixed(2)}%`;
     document.getElementById("meta").textContent = `${Math.floor(elapsedHours)}/${totalHours} horas · Quedan ${Math.ceil(hoursLeft)}`;
 
     const barEl = document.getElementById("bar");
-    for (let month = 1; month < 12; month++) {
+    const totalDays = Math.round((end - start) / (24 * 60 * 60 * 1000));
+    for (let i = 1; i < totalDays; i++) {
       const marker = document.createElement("div");
       marker.className = "marker";
-      if (month === 3 || month === 6 || month === 9) marker.classList.add("strong");
-      const mDate = new Date(year, month, 1);
-      marker.style.left = `${((mDate - start) / (end - start)) * 100}%`;
+      marker.style.left = `${(i / totalDays) * 100}%`;
       barEl.appendChild(marker);
     }
   </script>

@@ -3,27 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tarjeta hoy</title>
-  <link rel="stylesheet" href="../shared/card.css" />
+  <title>Tarjeta semana</title>
+  <link rel="stylesheet" href="../../shared/card.css" />
 </head>
 <body>
-  <div class="title">Hoy</div>
+  <div class="title">Esta semana</div>
   <div class="percent" id="percent"></div>
   <div class="bar"><div class="fill" id="fill"></div></div>
   <div class="meta" id="meta"></div>
 
   <script>
     const now = new Date();
-    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+    const jsDay = now.getDay();
+    const dayOffset = (jsDay + 6) % 7;
+    const start = new Date(now);
+    start.setHours(0, 0, 0, 0);
+    start.setDate(start.getDate() - dayOffset);
+    const end = new Date(start);
+    end.setDate(end.getDate() + 7);
 
     const percent = ((now - start) / (end - start)) * 100;
-    const elapsedHours = (now - start) / (60 * 60 * 1000);
-    const hoursLeft = Math.max(0, 24 - elapsedHours);
+    const totalDays = 7;
+    const dayInWeek = dayOffset + 1;
+    const daysLeft = Math.max(0, Math.ceil((end - now) / (24 * 60 * 60 * 1000)));
 
     document.getElementById("percent").textContent = `${percent.toFixed(1)}%`;
     document.getElementById("fill").style.width = `${Math.max(0, Math.min(100, percent)).toFixed(2)}%`;
-    document.getElementById("meta").textContent = `${Math.floor(elapsedHours)}/24 horas · Quedan ${Math.ceil(hoursLeft)}`;
+    document.getElementById("meta").textContent = `Día ${dayInWeek}/${totalDays} · Quedan ${daysLeft} días`;
   </script>
   <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
   <noscript>

@@ -2,32 +2,33 @@
 
 Este proyecto sirve para mostrar en Notion widgets de progreso de forma visual y automática.
 
-Muestra:
+Por ejemplo:
 - porcentaje del año transcurrido
 - días restantes
 - barra de progreso visual
-- mensaje breve inspiracional
 
 ## Uso directo
 
-El widget ya está publicado y se puede usar directamente aquí:
+Los widgets ya están publicados y se pueden usar directamente aquí:
 
 `https://cbeceiro.github.io/progressbarnotion/`
 
 Para usarlo en Notion:
 1. Escribe `/embed`
-2. Pega la URL
+2. Pega la URL del widget que hayas elegido
 3. Ajusta el tamaño del bloque
 
-## Archivo
+## Estructura
 
-El widget funciona con un único archivo:
+Los widgets están organizados por secciones:
 
-- `index.html`
-
-## Aviso de visitas
-
-Al usar los widgets mediante embed en Notion, se registra únicamente el número de visitas de cada página.
+- `progress/day`, `progress/week`, `progress/month`, `progress/quarter`, `progress/year`
+- `cards/day`, `cards/week`, `cards/month`, `cards/quarter`, `cards/year`
+- `hours/day`, `hours/week`, `hours/month`, `hours/year`
+- `one-percent/compound`, `one-percent/compound-quarter`, `one-percent/compound-milestones`, `one-percent/compound-milestones-dates`
+- `energy/curve-day`
+- `counters/weekends-left`, `counters/mondays-left`
+- Estilos compartidos en `shared/`
 
 ## Personalización
 
