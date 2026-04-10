@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cbeceiro.github.io/progressbarnotion/sitemap.xml
