@@ -1,121 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/cards/day/</loc>
+    <loc>https://cbeceiro.github.io/progressbarnotion/en/energy/curve-day/</loc>
     <lastmod>2026-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/cards/month/</loc>
+    <loc>https://cbeceiro.github.io/progressbarnotion/en/</loc>
     <lastmod>2026-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/cards/quarter/</loc>
+    <loc>https://cbeceiro.github.io/progressbarnotion/en/one-percent/compound-milestones-dates/</loc>
     <lastmod>2026-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/cards/week/</loc>
+    <loc>https://cbeceiro.github.io/progressbarnotion/en/one-percent/compound-quarter/</loc>
     <lastmod>2026-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/cards/year/</loc>
+    <loc>https://cbeceiro.github.io/progressbarnotion/en/one-percent/compound/</loc>
     <lastmod>2026-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/energy/curve-day/</loc>
+    <loc>https://cbeceiro.github.io/progressbarnotion/en/progress/day/</loc>
     <lastmod>2026-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/hours/day/</loc>
+    <loc>https://cbeceiro.github.io/progressbarnotion/en/progress/month/</loc>
     <lastmod>2026-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/hours/month/</loc>
+    <loc>https://cbeceiro.github.io/progressbarnotion/en/progress/quarter/</loc>
     <lastmod>2026-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/hours/week/</loc>
+    <loc>https://cbeceiro.github.io/progressbarnotion/en/progress/week/</loc>
     <lastmod>2026-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/hours/year/</loc>
+    <loc>https://cbeceiro.github.io/progressbarnotion/en/progress/year/</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cbeceiro.github.io/progressbarnotion/es/energy/curve-day/</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cbeceiro.github.io/progressbarnotion/es/</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cbeceiro.github.io/progressbarnotion/es/one-percent/compound-milestones-dates/</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cbeceiro.github.io/progressbarnotion/es/one-percent/compound-quarter/</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cbeceiro.github.io/progressbarnotion/es/one-percent/compound/</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cbeceiro.github.io/progressbarnotion/es/progress/day/</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cbeceiro.github.io/progressbarnotion/es/progress/month/</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cbeceiro.github.io/progressbarnotion/es/progress/quarter/</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cbeceiro.github.io/progressbarnotion/es/progress/week/</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cbeceiro.github.io/progressbarnotion/es/progress/year/</loc>
     <lastmod>2026-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://cbeceiro.github.io/progressbarnotion/</loc>
-    <lastmod>2026-04-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/one-percent/compound-milestones-dates/</loc>
-    <lastmod>2026-04-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/one-percent/compound-milestones/</loc>
-    <lastmod>2026-04-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/one-percent/compound-quarter/</loc>
-    <lastmod>2026-04-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/one-percent/compound/</loc>
-    <lastmod>2026-04-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/progress/day/</loc>
-    <lastmod>2026-04-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/progress/month/</loc>
-    <lastmod>2026-04-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/progress/quarter/</loc>
-    <lastmod>2026-04-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/progress/week/</loc>
-    <lastmod>2026-04-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://cbeceiro.github.io/progressbarnotion/progress/year/</loc>
     <lastmod>2026-04-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

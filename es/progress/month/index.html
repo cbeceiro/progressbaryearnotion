@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- SEO -->
+  <meta name="description" content="Progreso del mes para Notion. Widget estatico listo para embeber en Notion con GitHub Pages." />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://cbeceiro.github.io/progressbarnotion/es/progress/month/" />
+  <link rel="alternate" hreflang="es" href="https://cbeceiro.github.io/progressbarnotion/es/progress/month/" />
+  <link rel="alternate" hreflang="en" href="https://cbeceiro.github.io/progressbarnotion/en/progress/month/" />
+  <link rel="alternate" hreflang="x-default" href="https://cbeceiro.github.io/progressbarnotion/es/progress/month/" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Progreso del mes | Notion Widgets" />
+  <meta property="og:description" content="Progreso del mes para Notion. Widget estatico listo para embeber en Notion con GitHub Pages." />
+  <meta property="og:url" content="https://cbeceiro.github.io/progressbarnotion/es/progress/month/" />
+  <meta property="og:site_name" content="Notion Widgets" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Progreso del mes | Notion Widgets" />
+  <meta name="twitter:description" content="Progreso del mes para Notion. Widget estatico listo para embeber en Notion con GitHub Pages." />
+  <!-- /SEO -->
+  <title>Progreso del mes | Notion Widgets</title>
+  <link rel="stylesheet" href="../../shared/widget.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="title" id="title"></div>
+    <div class="bar" id="bar">
+      <div class="fill" id="fill"></div>
+    </div>
+    <div class="meta" id="meta"></div>
+  </div>
+
+  <script>
+    const title = "Progreso del mes";
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const start = new Date(year, month, 1, 0, 0, 0, 0);
+    const end = new Date(year, month + 1, 1, 0, 0, 0, 0);
+
+    const msPerDay = 24 * 60 * 60 * 1000;
+    const elapsed = now - start;
+    const total = end - start;
+    const percent = (elapsed / total) * 100;
+
+    const totalDays = Math.round((end - start) / msPerDay);
+    const dayOfMonth = now.getDate();
+    const daysLeft = Math.max(0, Math.ceil((end - now) / msPerDay));
+
+    const titleEl = document.getElementById("title");
+    const barEl = document.getElementById("bar");
+    const fillEl = document.getElementById("fill");
+    const metaEl = document.getElementById("meta");
+
+    titleEl.textContent = title;
+    fillEl.style.width = `${Math.max(0, Math.min(100, percent)).toFixed(2)}%`;
+    metaEl.textContent = `${percent.toFixed(1)}% completado · Día ${dayOfMonth}/${totalDays} · Quedan ${daysLeft} días`;
+
+    for (let i = 1; i < totalDays; i++) {
+      const marker = document.createElement("div");
+      marker.className = "marker";
+      marker.style.left = `${(i / totalDays) * 100}%`;
+      barEl.appendChild(marker);
+    }
+  </script>
+  <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript>
+    <img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" />
+  </noscript>
+</body>
+</html>

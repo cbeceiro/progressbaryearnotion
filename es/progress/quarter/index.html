@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- SEO -->
+  <meta name="description" content="Progreso del trimestre para Notion. Widget estatico listo para embeber en Notion con GitHub Pages." />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://cbeceiro.github.io/progressbarnotion/es/progress/quarter/" />
+  <link rel="alternate" hreflang="es" href="https://cbeceiro.github.io/progressbarnotion/es/progress/quarter/" />
+  <link rel="alternate" hreflang="en" href="https://cbeceiro.github.io/progressbarnotion/en/progress/quarter/" />
+  <link rel="alternate" hreflang="x-default" href="https://cbeceiro.github.io/progressbarnotion/es/progress/quarter/" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Progreso del trimestre | Notion Widgets" />
+  <meta property="og:description" content="Progreso del trimestre para Notion. Widget estatico listo para embeber en Notion con GitHub Pages." />
+  <meta property="og:url" content="https://cbeceiro.github.io/progressbarnotion/es/progress/quarter/" />
+  <meta property="og:site_name" content="Notion Widgets" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Progreso del trimestre | Notion Widgets" />
+  <meta name="twitter:description" content="Progreso del trimestre para Notion. Widget estatico listo para embeber en Notion con GitHub Pages." />
+  <!-- /SEO -->
+  <title>Progreso del trimestre | Notion Widgets</title>
+  <link rel="stylesheet" href="../../shared/widget.css" />
+</head>
+<body>
+  <div class="wrap">
+    <div class="title" id="title"></div>
+    <div class="bar" id="bar">
+      <div class="fill" id="fill"></div>
+    </div>
+    <div class="meta" id="meta"></div>
+  </div>
+
+  <script>
+    const now = new Date();
+    const year = now.getFullYear();
+    const quarter = Math.floor(now.getMonth() / 3) + 1;
+    const startMonth = (quarter - 1) * 3;
+
+    const start = new Date(year, startMonth, 1, 0, 0, 0, 0);
+    const end = new Date(year, startMonth + 3, 1, 0, 0, 0, 0);
+    const msPerDay = 24 * 60 * 60 * 1000;
+
+    const elapsed = now - start;
+    const total = end - start;
+    const percent = (elapsed / total) * 100;
+
+    const totalDays = Math.round((end - start) / msPerDay);
+    const dayOfQuarter = Math.floor((now - start) / msPerDay) + 1;
+    const daysLeft = Math.max(0, Math.ceil((end - now) / msPerDay));
+
+    const titleEl = document.getElementById("title");
+    const barEl = document.getElementById("bar");
+    const fillEl = document.getElementById("fill");
+    const metaEl = document.getElementById("meta");
+
+    titleEl.textContent = `Progreso del trimestre (Q${quarter})`;
+    fillEl.style.width = `${Math.max(0, Math.min(100, percent)).toFixed(2)}%`;
+    metaEl.textContent = `${percent.toFixed(1)}% completado · Día ${dayOfQuarter}/${totalDays} · Quedan ${daysLeft} días`;
+
+    let accumulatedDays = 0;
+    for (let i = 0; i < 3; i++) {
+      if (i > 0) {
+        const marker = document.createElement("div");
+        marker.className = "marker strong";
+        marker.style.left = `${(accumulatedDays / totalDays) * 100}%`;
+        barEl.appendChild(marker);
+      }
+      const mStart = new Date(year, startMonth + i, 1);
+      const mEnd = new Date(year, startMonth + i + 1, 1);
+      accumulatedDays += Math.round((mEnd - mStart) / msPerDay);
+    }
+  </script>
+  <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript>
+    <img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" />
+  </noscript>
+</body>
+</html>

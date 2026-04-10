@@ -1,0 +1,79 @@
+:root {
+  --bg: transparent;
+  --text: #000000;
+  --track: #ecebe8;
+  --fill: #68b984;
+  --marker: rgba(0, 0, 0, 0.10);
+  --marker-strong: rgba(0, 0, 0, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background: var(--bg);
+  font-family: Inter, Arial, sans-serif;
+  color: var(--text);
+}
+
+body {
+  padding: 10px 12px;
+}
+
+.wrap {
+  width: 100%;
+}
+
+.title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.bar {
+  position: relative;
+  width: 100%;
+  height: 12px;
+  background: var(--track);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--fill);
+  z-index: 1;
+}
+
+.marker {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  height: 12px;
+  background: var(--marker);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.marker.strong {
+  background: var(--marker-strong);
+}
+
+.meta {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
