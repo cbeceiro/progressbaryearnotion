@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- SEO -->
+  <meta name="description" content="Widget de fase lunar para Notion. Widget estático listo para embeber en Notion con GitHub Pages." />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://cbeceiro.github.io/progressbarnotion/es/lunar/phase/" />
+  <link rel="alternate" hreflang="es" href="https://cbeceiro.github.io/progressbarnotion/es/lunar/phase/" />
+  <link rel="alternate" hreflang="en" href="https://cbeceiro.github.io/progressbarnotion/en/lunar/phase/" />
+  <link rel="alternate" hreflang="x-default" href="https://cbeceiro.github.io/progressbarnotion/es/lunar/phase/" />
+
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Fase Lunar | Notion Widgets" />
+  <meta property="og:description" content="Widget de fase lunar para Notion. Widget estático listo para embeber en Notion con GitHub Pages." />
+  <meta property="og:url" content="https://cbeceiro.github.io/progressbarnotion/es/lunar/phase/" />
+  <meta property="og:site_name" content="Notion Widgets" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Fase Lunar | Notion Widgets" />
+  <meta name="twitter:description" content="Widget de fase lunar para Notion. Widget estático listo para embeber en Notion con GitHub Pages." />
+  <!-- /SEO -->
+  <title>Fase Lunar | Notion Widgets</title>
+  <style>
+    :root {
+      --bg: transparent;
+      --text: #111111;
+      --muted: #666666;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: var(--bg);
+      font-family: Inter, Arial, sans-serif;
+      color: var(--text);
+    }
+
+    body { padding: 8px 10px; }
+
+    .title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .wrap {
+      width: 100%;
+      height: 140px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .meta {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
+<body>
+  <div class="title">Fase Lunar</div>
+  <div class="wrap"><canvas id="chart"></canvas></div>
+  <div class="meta" id="meta"></div>
+
+  <script>
+    const canvas = document.getElementById("chart");
+    const ctx = canvas.getContext("2d");
+    const metaEl = document.getElementById("meta");
+
+    const SYNODIC_MONTH = 29.53058867;
+    const KNOWN_NEW_MOON = new Date("2000-01-06T18:14:00Z").getTime();
+
+    function getCycleDay(date) {
+      const days = (date.getTime() - KNOWN_NEW_MOON) / 86400000;
+      return ((days % SYNODIC_MONTH) + SYNODIC_MONTH) % SYNODIC_MONTH;
+    }
+
+    function getPhaseName(cycleDay) {
+      if (cycleDay < 1.0 || cycleDay >= 28.5) return "Luna Nueva";
+      if (cycleDay < 6.3) return "Luna Creciente";
+      if (cycleDay < 8.3) return "Cuarto Creciente";
+      if (cycleDay < 13.8) return "Gibosa Creciente";
+      if (cycleDay < 15.8) return "Luna Llena";
+      if (cycleDay < 21.3) return "Gibosa Menguante";
+      if (cycleDay < 23.3) return "Cuarto Menguante";
+      return "Luna Menguante";
+    }
+
+    function formatDays(d) {
+      if (d < 1) return Math.round(d * 24) + "h";
+      return Math.round(d) + "d";
+    }
+
+    function drawMoon(cx, cy, r, phase) {
+      const DARK = "#1c1c2e";
+      const BRIGHT = "#f5e4c0";
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+      ctx.fillStyle = DARK;
+      ctx.fill();
+
+      if (phase < 0.02 || phase > 0.98) return;
+
+      if (phase > 0.48 && phase < 0.52) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+        ctx.fillStyle = BRIGHT;
+        ctx.fill();
+        return;
+      }
+
+      const termX = r * Math.cos(phase * 2 * Math.PI);
+      const termAbsX = Math.abs(termX);
+      const isWaxing = phase < 0.5;
+
+      ctx.beginPath();
+      if (isWaxing) {
+        ctx.arc(cx, cy, r, -Math.PI / 2, Math.PI / 2, false);
+      } else {
+        ctx.arc(cx, cy, r, -Math.PI / 2, Math.PI / 2, true);
+      }
+
+      if (termAbsX > 0.5) {
+        const ccw = (termX < 0) === isWaxing;
+        ctx.ellipse(cx, cy, termAbsX, r, 0, Math.PI / 2, -Math.PI / 2, ccw);
+      }
+
+      ctx.closePath();
+      ctx.fillStyle = BRIGHT;
+      ctx.fill();
+    }
+
+    function draw() {
+      const ratio = window.devicePixelRatio || 1;
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      canvas.width = Math.floor(w * ratio);
+      canvas.height = Math.floor(h * ratio);
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+
+      const now = new Date();
+      const cycleDay = getCycleDay(now);
+      const phase = cycleDay / SYNODIC_MONTH;
+      const illumination = Math.round((1 - Math.cos(phase * 2 * Math.PI)) / 2 * 100);
+      const phaseName = getPhaseName(cycleDay);
+
+      const daysToFull = phase < 0.5
+        ? (0.5 - phase) * SYNODIC_MONTH
+        : (1.5 - phase) * SYNODIC_MONTH;
+      const daysToNew = (1 - phase) * SYNODIC_MONTH;
+
+      const moonR = 40;
+      const ringR = moonR + 10;
+      const cx = 8 + ringR;
+      const cy = h / 2;
+
+      // Anillo del ciclo
+      ctx.beginPath();
+      ctx.arc(cx, cy, ringR, 0, 2 * Math.PI);
+      ctx.strokeStyle = "rgba(180, 150, 60, 0.22)";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([2, 4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Marcas en luna nueva / cuartos / llena
+      [0, 0.25, 0.5, 0.75].forEach(tp => {
+        const angle = tp * 2 * Math.PI - Math.PI / 2;
+        ctx.beginPath();
+        ctx.moveTo(cx + Math.cos(angle) * (ringR - 4), cy + Math.sin(angle) * (ringR - 4));
+        ctx.lineTo(cx + Math.cos(angle) * (ringR + 4), cy + Math.sin(angle) * (ringR + 4));
+        ctx.strokeStyle = "rgba(180, 150, 60, 0.5)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+
+      // Punto de posición actual en el ciclo
+      const dotAngle = phase * 2 * Math.PI - Math.PI / 2;
+      const dotX = cx + Math.cos(dotAngle) * ringR;
+      const dotY = cy + Math.sin(dotAngle) * ringR;
+
+      ctx.beginPath();
+      ctx.arc(dotX, dotY, 7, 0, 2 * Math.PI);
+      ctx.fillStyle = "rgba(212, 160, 23, 0.2)";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(dotX, dotY, 3.5, 0, 2 * Math.PI);
+      ctx.fillStyle = "#d4a017";
+      ctx.fill();
+
+      // Luna
+      drawMoon(cx, cy, moonR, phase);
+
+      // Borde de la luna
+      ctx.beginPath();
+      ctx.arc(cx, cy, moonR, 0, 2 * Math.PI);
+      ctx.strokeStyle = "rgba(180, 150, 60, 0.3)";
+      ctx.lineWidth = 0.75;
+      ctx.stroke();
+
+      // Texto a la derecha
+      const textX = cx + ringR + 16;
+      if (w - textX > 60) {
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+
+        ctx.font = "bold 14px Inter, Arial, sans-serif";
+        ctx.fillStyle = "#111111";
+        ctx.fillText(phaseName, textX, cy - 26);
+
+        ctx.font = "12px Inter, Arial, sans-serif";
+        ctx.fillStyle = "#444444";
+        ctx.fillText(illumination + "% iluminada", textX, cy - 7);
+
+        ctx.fillText("Día " + cycleDay.toFixed(1) + " / " + SYNODIC_MONTH.toFixed(1), textX, cy + 12);
+
+        ctx.font = "11px Inter, Arial, sans-serif";
+        ctx.fillStyle = "#777777";
+        ctx.fillText("Luna llena en " + formatDays(daysToFull), textX, cy + 30);
+        ctx.fillText("Luna nueva en " + formatDays(daysToNew), textX, cy + 46);
+      }
+
+      // Etiquetas del anillo
+      ctx.font = "9px Inter, Arial, sans-serif";
+      ctx.fillStyle = "rgba(100,80,30,0.7)";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "bottom";
+      ctx.fillText("Nueva", cx, cy - ringR - 5);
+      ctx.textBaseline = "top";
+      ctx.fillText("Llena", cx, cy + ringR + 5);
+
+      const dateStr = now.toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" });
+      metaEl.textContent = dateStr + " · Nueva 0d · Cuarto creciente 7.4d · Luna llena 14.8d · Cuarto menguante 22.1d";
+    }
+
+    draw();
+    window.addEventListener("resize", draw);
+  </script>
+  <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript>
+    <img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" />
+  </noscript>
+</body>
+</html>
