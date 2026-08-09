@@ -39,20 +39,29 @@
       margin: 0;
       padding: 0;
       width: 100%;
+      height: 100%;
       background: var(--bg);
       font-family: Inter, Arial, sans-serif;
       color: var(--text);
     }
 
-    body { padding: 8px 10px; }
+    body {
+      box-sizing: border-box;
+      padding: 8px 10px;
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+    }
 
     .title {
+      flex: 0 0 auto;
       font-size: 13px;
       font-weight: 600;
       margin-bottom: 4px;
     }
 
     .desc {
+      flex: 0 0 auto;
       font-size: 11px;
       color: var(--muted);
       margin-bottom: 8px;
@@ -60,8 +69,12 @@
     }
 
     .wrap {
+      flex: 1 1 auto;
+      min-height: 30px;
       width: 100%;
-      overflow-x: auto;
+      overflow: auto;
+      display: flex;
+      align-items: flex-start;
     }
 
     canvas {
@@ -69,7 +82,8 @@
     }
 
     .meta {
-      margin-top: 8px;
+      flex: 0 0 auto;
+      margin-bottom: 8px;
       font-size: 11px;
       color: var(--muted);
       line-height: 1.4;
@@ -83,8 +97,8 @@
 <body>
   <div class="title">Life in Weeks</div>
   <div class="desc">Each square is one week of a life. Filled = already lived, gold = current week.</div>
-  <div class="wrap"><canvas id="chart"></canvas></div>
   <div class="meta" id="meta"></div>
+  <div class="wrap"><canvas id="chart"></canvas></div>
 
   <script>
     const canvas = document.getElementById("chart");
@@ -124,9 +138,12 @@
 
       const dpr = window.devicePixelRatio || 1;
       const containerWidth = wrap.clientWidth;
+      const containerHeight = Math.max(wrap.clientHeight, 1);
       const gap = 1;
-      const rawCell = (containerWidth - (COLS - 1) * gap) / COLS;
-      const cell = Math.min(Math.max(rawCell, 3), 9);
+      const cellFromWidth = (containerWidth - (COLS - 1) * gap) / COLS;
+      const cellFromHeight = (containerHeight - (years - 1) * gap) / years;
+      const rawCell = Math.min(cellFromWidth, cellFromHeight);
+      const cell = Math.min(Math.max(rawCell, 3), 16);
       const gridW = COLS * cell + (COLS - 1) * gap;
       const gridH = years * cell + (years - 1) * gap;
 
