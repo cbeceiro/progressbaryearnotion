@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- SEO -->
+  <meta name="description" content="Widget de la vida en semanas para Notion. Widget estático listo para embeber en Notion con GitHub Pages." />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://cbeceiro.github.io/progressbarnotion/es/life/weeks/" />
+  <link rel="alternate" hreflang="es" href="https://cbeceiro.github.io/progressbarnotion/es/life/weeks/" />
+  <link rel="alternate" hreflang="en" href="https://cbeceiro.github.io/progressbarnotion/en/life/weeks/" />
+  <link rel="alternate" hreflang="x-default" href="https://cbeceiro.github.io/progressbarnotion/en/life/weeks/" />
+
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="La Vida en Semanas | Notion Widgets" />
+  <meta property="og:description" content="Widget de la vida en semanas para Notion. Widget estático listo para embeber en Notion con GitHub Pages." />
+  <meta property="og:url" content="https://cbeceiro.github.io/progressbarnotion/es/life/weeks/" />
+  <meta property="og:site_name" content="Notion Widgets" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="La Vida en Semanas | Notion Widgets" />
+  <meta name="twitter:description" content="Widget de la vida en semanas para Notion. Widget estático listo para embeber en Notion con GitHub Pages." />
+  <!-- /SEO -->
+  <title>La Vida en Semanas | Notion Widgets</title>
+  <style>
+    :root {
+      --bg: transparent;
+      --text: #111111;
+      --muted: #666666;
+      --fill: #68b984;
+      --track: #ecebe8;
+      --current: #d4a017;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: var(--bg);
+      font-family: Inter, Arial, sans-serif;
+      color: var(--text);
+    }
+
+    body { padding: 8px 10px; }
+
+    .title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .desc {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    .meta {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .meta strong {
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="title">La Vida en Semanas</div>
+  <div class="desc">Cada cuadro es una semana de una vida. Relleno = ya vivida, dorado = semana actual.</div>
+  <div class="wrap"><canvas id="chart"></canvas></div>
+  <div class="meta" id="meta"></div>
+
+  <script>
+    const canvas = document.getElementById("chart");
+    const ctx = canvas.getContext("2d");
+    const wrap = canvas.parentElement;
+    const metaEl = document.getElementById("meta");
+
+    const COLS = 52;
+    const DEFAULT_YEARS = 90;
+    const MS_PER_WEEK = 7 * 24 * 60 * 60 * 1000;
+    const MS_PER_YEAR = 365.2425 * 24 * 60 * 60 * 1000;
+
+    function getParams() {
+      const params = new URLSearchParams(window.location.search);
+      const dob = params.get("dob");
+      let years = parseInt(params.get("years"), 10);
+      if (!Number.isFinite(years) || years < 1 || years > 120) years = DEFAULT_YEARS;
+      return { dob, years };
+    }
+
+    function parseDob(dob) {
+      if (!dob || !/^\d{4}-\d{2}-\d{2}$/.test(dob)) return null;
+      const d = new Date(dob + "T00:00:00");
+      if (isNaN(d.getTime())) return null;
+      return d;
+    }
+
+    function draw() {
+      const { dob, years } = getParams();
+      const birth = parseDob(dob);
+      const totalWeeks = years * COLS;
+
+      const style = getComputedStyle(document.documentElement);
+      const fillColor = style.getPropertyValue("--fill").trim();
+      const trackColor = style.getPropertyValue("--track").trim();
+      const currentColor = style.getPropertyValue("--current").trim();
+
+      const dpr = window.devicePixelRatio || 1;
+      const containerWidth = wrap.clientWidth;
+      const gap = 1;
+      const rawCell = (containerWidth - (COLS - 1) * gap) / COLS;
+      const cell = Math.min(Math.max(rawCell, 3), 9);
+      const gridW = COLS * cell + (COLS - 1) * gap;
+      const gridH = years * cell + (years - 1) * gap;
+
+      canvas.style.width = gridW + "px";
+      canvas.style.height = gridH + "px";
+      canvas.width = Math.max(1, Math.round(gridW * dpr));
+      canvas.height = Math.max(1, Math.round(gridH * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, gridW, gridH);
+
+      let livedWeeks = 0;
+      let currentIndex = -1;
+      let ageYears = 0;
+      let validBirth = false;
+
+      if (birth && birth.getTime() <= Date.now()) {
+        validBirth = true;
+        const diffMs = Date.now() - birth.getTime();
+        const livedWeeksRaw = Math.floor(diffMs / MS_PER_WEEK);
+        livedWeeks = Math.min(livedWeeksRaw, totalWeeks);
+        currentIndex = livedWeeksRaw < totalWeeks ? livedWeeksRaw : -1;
+        ageYears = diffMs / MS_PER_YEAR;
+      }
+
+      for (let i = 0; i < totalWeeks; i++) {
+        const row = Math.floor(i / COLS);
+        const col = i % COLS;
+        const x = col * (cell + gap);
+        const y = row * (cell + gap);
+
+        if (i === currentIndex) {
+          ctx.fillStyle = currentColor;
+        } else if (i < livedWeeks) {
+          ctx.fillStyle = fillColor;
+        } else {
+          ctx.fillStyle = trackColor;
+        }
+        ctx.fillRect(x, y, cell, cell);
+      }
+
+      if (validBirth) {
+        const percent = Math.min(100, (livedWeeks / totalWeeks) * 100);
+        const bornStr = birth.toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" });
+        metaEl.innerHTML = `<strong>${ageYears.toFixed(1)}</strong> años · <strong>${livedWeeks.toLocaleString("es-ES")}</strong> / ${totalWeeks.toLocaleString("es-ES")} semanas vividas (${percent.toFixed(1)}%) · Nacido el ${bornStr} · estimación de ${years} años`;
+      } else {
+        metaEl.textContent = "Añade tu fecha de nacimiento a la URL, ej. ?dob=1990-05-15 (opcional &years=90 para la esperanza de vida).";
+      }
+    }
+
+    draw();
+    window.addEventListener("resize", draw);
+  </script>
+  <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+  <noscript>
+    <img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" />
+  </noscript>
+</body>
+</html>
